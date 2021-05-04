@@ -22,7 +22,8 @@ namespace api_auth_example.Controllers
 
             return Ok(new
             {
-                message = "Dados configurados"
+                employee,
+                manager
             });
         }
     }
