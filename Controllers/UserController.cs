@@ -34,7 +34,8 @@ namespace api_auth_example.Controllers
 
         [HttpPost]
         [Route("")]        
-        [Authorize(Roles = "admin")]
+        [AllowAnonymous]
+        // [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Post(
             [FromServices] DataContext context,
             [FromBody] User model)
