@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Linq;
 using System.Text;
+using api_auth_example.Data;
 
 namespace api_auth_example
 {
@@ -54,7 +55,6 @@ namespace api_auth_example
                     ValidateAudience = false
                 };
             });
-
 
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));                

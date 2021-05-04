@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +7,7 @@ using api_auth_example.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using api_auth_example.Data;
 
 namespace api_auth_example.Controllers
 {
@@ -19,7 +17,7 @@ namespace api_auth_example.Controllers
 
         [HttpGet]
         [Route("")]
-        [Authorize(Roles = "employee")]        
+        [Authorize(Roles = "employee")]
         // [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)] // para definir o cache somente neste método.
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)] // caso toda a aplicação esteja com cache mas este método não pode ter cache.
         public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
@@ -35,9 +33,8 @@ namespace api_auth_example.Controllers
 
 
         [HttpPost]
-        [Route("")]
-        [AllowAnonymous]
-        // [Authorize(Roles = "admin")]
+        [Route("")]        
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Post(
             [FromServices] DataContext context,
             [FromBody] User model)
