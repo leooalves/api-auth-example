@@ -91,6 +91,29 @@ namespace api_auth_example.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("{id:int}")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<User>> Delete(
+            [FromServices] DataContext context,
+            int id)
+        {
+            var category = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null)
+                return NotFound(new { message = "Usuário não encontrado" });
+
+            try
+            {
+                context.Users.Remove(category);
+                await context.SaveChangesAsync();
+                return category;
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Não foi possível remover o usuário" });
+            }
+        }
+
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<dynamic>> Authenticate(

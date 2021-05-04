@@ -12,8 +12,8 @@ namespace api_auth_example.Controllers
         [Route("")]
         public async Task<ActionResult<dynamic>> Get([FromServices] DataContext context)
         {
-            var employee = new User { Id = 1, Username = "leonardo", Password = "leonardo", Role = "employee" };
-            var manager = new User { Id = 2, Username = "admin", Password = "password", Role = "admin" };
+            var employee = new User { Id = 1, Username = "employee", Password = "employee", Role = "employee" };
+            var manager = new User { Id = 2, Username = "admin", Password = "admin", Role = "admin" };
             
             context.Users.Add(employee);
             context.Users.Add(manager);
