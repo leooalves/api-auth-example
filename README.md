@@ -22,8 +22,11 @@ $ dotnet run
 
 ```
 
-You can use the swagger page (https://localhost:5001/swagger) to check the documentation.
+You can check the documentation on (https://localhost:5001/swagger).
 
+Also, you can use the endpoint https://localhost:5001/v1 to create the first users. 
+
+By default the API is using InMemoryDatabase but you can change it easily replacing the "AddDbContext" line in Startup.cs.
 
 
 ## Contributing
