@@ -75,8 +75,13 @@ namespace api_auth_example
 
             app.UseHttpsRedirection();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "api_auth_example v1"));
+            app.UseSwagger();            
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My service");
+                c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
+            });
 
             app.UseRouting();
 
