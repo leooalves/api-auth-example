@@ -1,6 +1,6 @@
-# api-auth-example
+# Authenticaiton and Authorization example
 
-A simple Authentication and Authorization api using .NET 5, JSON Web Token (JWT) and Entity Framework (EF).
+A simple Authentication and Authorization API using .NET 5, JSON Web Token (JWT) and Entity Framework (EF).
 
 ## Installing / Getting started
 
