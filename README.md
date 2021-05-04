@@ -22,7 +22,7 @@ $ dotnet run
 
 ```
 
-You can check the documentation on (https://localhost:5001/swagger).
+You can check the documentation on https://localhost:5001/swagger.
 
 Also, you can use the endpoint https://localhost:5001/v1 to create the first users. 
 
