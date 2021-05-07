@@ -61,7 +61,11 @@ namespace api_auth_example
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api Auth Example", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "Api Authentication Example", 
+                    Version = "v1" 
+                });
             });
         }
 
@@ -79,7 +83,7 @@ namespace api_auth_example
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My service");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Authentication Example");
                 c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
             });
 
