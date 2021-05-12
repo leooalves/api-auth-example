@@ -113,7 +113,7 @@ namespace api_auth_example.Controllers
         }
 
         /// <summary>
-        /// Delete a specifc user
+        /// Delete a specific user
         /// </summary>        
         /// <param name="id">id of the user</param>
         /// <returns></returns>
