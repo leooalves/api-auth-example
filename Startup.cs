@@ -63,8 +63,7 @@ namespace api_auth_example
             // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));                
 
             // Set the comments path for the Swagger JSON and UI.
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
 
             services.AddSwaggerGen(c =>
             {
@@ -72,7 +71,7 @@ namespace api_auth_example
                 {
                     Title = "Api Authentication Example",
                     Version = "v1",
-                    Description = "A example for test api authentication",
+                    Description = "Testing Authentication and Authorization using dotnet",
                     Contact = new OpenApiContact
                     {
                         Name = "Leonardo Oliveira Alves",
@@ -88,11 +87,12 @@ namespace api_auth_example
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
-                    Name = "Authorization",
+                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below",
+                    Name = "JWT Authentication",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -110,6 +110,9 @@ namespace api_auth_example
                     }
                 });
 
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
             });
@@ -134,11 +137,7 @@ namespace api_auth_example
                 c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
             });
 
-
-
             app.UseRouting();
-
-            app.UseStatusCodePages();
 
             app.UseCors(x => x
                 .AllowAnyOrigin()

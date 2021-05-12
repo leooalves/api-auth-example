@@ -15,19 +15,26 @@ namespace api_auth_example.Controllers
     public class UserController : Controller
     {
 
+        private readonly DataContext _context;
+        public UserController(DataContext context)
+        {
+            _context = context;
+        }
+
+
+
         /// <summary>
         /// Get all users
-        /// </summary>
-        /// <param name="context"></param>
+        /// </summary>        
         /// <returns></returns>
         [HttpGet]
         [Route("")]
         [Authorize(Roles = "employee,admin")]
         // [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)] // para definir o cache somente neste método.
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)] // caso toda a aplicação esteja com cache mas este método não pode ter cache.
-        public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
+        public async Task<ActionResult<List<User>>> Get()
         {
-            var users = await context
+            var users = await _context
                 .Users
                 .AsNoTracking()
                 .ToListAsync();
@@ -46,7 +53,6 @@ namespace api_auth_example.Controllers
         [AllowAnonymous]
         // [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Post(
-            [FromServices] DataContext context,
             [FromBody] User model)
         {
             // Verifica se os dados são válidos
@@ -58,8 +64,8 @@ namespace api_auth_example.Controllers
                 // Força o usuário a ser sempre "funcionário"
                 model.Role = "employee";
 
-                context.Users.Add(model);
-                await context.SaveChangesAsync();
+                _context.Users.Add(model);
+                await _context.SaveChangesAsync();
 
                 // Esconde a senha
                 model.Password = "";
@@ -82,7 +88,6 @@ namespace api_auth_example.Controllers
         [Route("{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Put(
-            [FromServices] DataContext context,
             int id,
             [FromBody] User model)
         {
@@ -96,8 +101,8 @@ namespace api_auth_example.Controllers
 
             try
             {
-                context.Entry(model).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                _context.Entry(model).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return model;
             }
             catch (Exception)
@@ -108,26 +113,24 @@ namespace api_auth_example.Controllers
         }
 
         /// <summary>
-        /// delete a user
-        /// </summary>
-        /// <param name="context"></param>
+        /// Delete a specifc user
+        /// </summary>        
         /// <param name="id">id of the user</param>
         /// <returns></returns>
         [HttpDelete]
         [Route("{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Delete(
-            [FromServices] DataContext context,
             int id)
         {
-            var category = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var category = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (category == null)
                 return NotFound(new { message = "Usuário não encontrado" });
 
             try
             {
-                context.Users.Remove(category);
-                await context.SaveChangesAsync();
+                _context.Users.Remove(category);
+                await _context.SaveChangesAsync();
                 return category;
             }
             catch (Exception)
@@ -137,17 +140,26 @@ namespace api_auth_example.Controllers
         }
 
         /// <summary>
-        /// Authentication method
+        /// Authentication method, returns the JWT token
         /// </summary>        
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     
+        ///     {
+        ///         "username":"batman",
+        ///         "password":"batman"
+        ///     }        
+        ///     
+        /// </remarks>
         /// <param name="model">user and password</param>
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<dynamic>> Authenticate(
-            [FromServices] DataContext context,
             [FromBody] User model)
         {
-            var user = await context.Users
+            var user = await _context.Users
                 .AsNoTracking()
                 .Where(x => x.Username == model.Username && x.Password == model.Password)
                 .FirstOrDefaultAsync();
