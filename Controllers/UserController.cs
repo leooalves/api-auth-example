@@ -15,9 +15,14 @@ namespace api_auth_example.Controllers
     public class UserController : Controller
     {
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("")]
-        [Authorize(Roles = "employee")]
+        [Authorize(Roles = "employee,admin")]
         // [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)] // para definir o cache somente neste método.
         // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)] // caso toda a aplicação esteja com cache mas este método não pode ter cache.
         public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
@@ -31,9 +36,13 @@ namespace api_auth_example.Controllers
         }
 
 
-
+        /// <summary>
+        /// Create a user
+        /// </summary>        
+        /// <param name="model">user</param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("")]        
+        [Route("")]
         [AllowAnonymous]
         // [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Post(
@@ -63,6 +72,12 @@ namespace api_auth_example.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <param name="id">id of the user</param>
+        /// <param name="model">user object</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("{id:int}")]
         [Authorize(Roles = "admin")]
@@ -92,14 +107,15 @@ namespace api_auth_example.Controllers
             }
         }
 
-
         /// <summary>
-        /// Deletes a specific User.
-        /// </summary>        
-        /// <param name="id"></param>    
+        /// delete a user
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="id">id of the user</param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]        
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Delete(
             [FromServices] DataContext context,
             int id)
@@ -120,6 +136,11 @@ namespace api_auth_example.Controllers
             }
         }
 
+        /// <summary>
+        /// Authentication method
+        /// </summary>        
+        /// <param name="model">user and password</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<dynamic>> Authenticate(
