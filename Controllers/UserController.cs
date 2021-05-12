@@ -92,9 +92,14 @@ namespace api_auth_example.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Deletes a specific User.
+        /// </summary>        
+        /// <param name="id"></param>    
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]        
         public async Task<ActionResult<User>> Delete(
             [FromServices] DataContext context,
             int id)

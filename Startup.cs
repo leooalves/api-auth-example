@@ -11,6 +11,9 @@ using Microsoft.OpenApi.Models;
 using System.Linq;
 using System.Text;
 using api_auth_example.Data;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace api_auth_example
 {
@@ -59,6 +62,10 @@ namespace api_auth_example
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));                
 
+            // Set the comments path for the Swagger JSON and UI.
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
@@ -66,7 +73,10 @@ namespace api_auth_example
                     Title = "Api Authentication Example", 
                     Version = "v1" 
                 });
-            });
+                c.IncludeXmlComments(xmlPath);
+
+            }); 
+                                   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +96,8 @@ namespace api_auth_example
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Authentication Example");
                 c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
             });
+
+           
 
             app.UseRouting();
 
